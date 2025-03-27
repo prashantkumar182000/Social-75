@@ -7,8 +7,6 @@ services:
     buildCommand: npm install
     startCommand: node -r dotenv/config server.js
     envVars:
-      - key: MONGODB_URI
-        value: mongodb+srv://prashantkumar182000:pk00712345@cluster0.tehdo.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0
       - key: DB_NAME
         value: social_cause_prod
       - key: PORT
