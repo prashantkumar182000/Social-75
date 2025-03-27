@@ -10,7 +10,7 @@ const helmet = require('helmet');
 const morgan = require('morgan');
 
 const app = express();
-const PORT = process.env.PORT || 5000;
+const PORT = process.env.PORT || 10000;
 
 // Security Middleware
 app.use(helmet());
@@ -144,6 +144,13 @@ const refreshNGOData = async () => {
 };
 
 // API Endpoints
+
+app.get('/', (req, res) => {
+  res.json({ 
+    status: 'API is running',
+    docs: 'https://social-75-39je.onrender.com/api/health' 
+  });
+});
 
 // Health Check
 app.get('/api/health', (req, res) => {

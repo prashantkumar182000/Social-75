@@ -56,7 +56,7 @@ const InteractiveMap = () => {
   useEffect(() => {
     const fetchMapData = async () => {
       try {
-        const response = await axios.get('http://localhost:5000/api/map');
+        const response = await axios.get('http://localhost:10000/api/map');
         setMapData(response.data);
         setLoading(false);
       } catch (error) {
@@ -81,7 +81,7 @@ const InteractiveMap = () => {
         timestamp: new Date().toISOString()
       };
       
-      const response = await axios.post('http://localhost:5000/api/map', newUser);
+      const response = await axios.post('http://localhost:10000/api/map', newUser);
       setMapData([...mapData, response.data.data]);
       setInterest('');
       setSuccess('Location added successfully!');

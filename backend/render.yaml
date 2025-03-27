@@ -10,6 +10,6 @@ services:
       - key: NODE_ENV
         value: production
       - key: PORT
-        value: 5000
+        value: 10000
       - key: DB_NAME
         value: social_cause_prod
