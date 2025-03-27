@@ -4,34 +4,12 @@ services:
     runtime: node
     region: oregon
     plan: free
-    buildCommand: npm install
-    startCommand: node -r dotenv/config server.js
+    buildCommand: cd backend && npm install
+    startCommand: cd backend && node server.js
     envVars:
-      - key: MONGODB_URI
-        value: mongodb+srv://prashantkumar182000:pk00712345@cluster0.tehdo.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0
-      - key: DB_NAME
-        value: social_cause_prod
-      - key: PORT
-        value: 5000
       - key: NODE_ENV
         value: production
-      - key: PUSHER_APP_ID
-        value: "1962195"
-      - key: PUSHER_KEY
-        value: b499431d9b73ef39d7a6
-      - key: PUSHER_SECRET
-        value: 696fa215743b578ca737
-      - key: PUSHER_CLUSTER
-        value: ap2
-      - key: TED_API_KEY
-        value: 407402ae9fmshba3a0489fd8dc50p162611jsn54e98f60acba
-      - key: TED_API_HOST
-        value: ted-talks-api.p.rapidapi.com
-      - key: FRONTEND_URL
-        value: https://your-frontend-domain.com
-      - key: CLOUDINARY_CLOUD_NAME
-        value: dw8ursrnr
-      - key: CLOUDINARY_API_KEY
-        value: "976551127782426"
-      - key: CLOUDINARY_API_SECRET
-        value: gHSsX9DnIGFz5j7EV1UlvndAY5c
+      - key: PORT
+        value: 5000
+      - key: DB_NAME
+        value: social_cause_prod
