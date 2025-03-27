@@ -33,7 +33,7 @@ const Chat = () => {
   useEffect(() => {
     const fetchMessages = async () => {
       try {
-        const response = await fetch('http://localhost:10000/api/messages');
+        const response = await fetch('https://social-75-39je.onrender.com/api/messages');
         const data = await response.json();
         setMessages(data);
         controls.start({ opacity: 1, y: 0 });
@@ -94,7 +94,7 @@ const Chat = () => {
       setNewMessage('');
 
       // Send to backend
-      await fetch('http://localhost:10000/api/send-message', {
+      await fetch('https://social-75-39je.onrender.com/api/send-message', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(message),
