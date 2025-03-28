@@ -16,6 +16,9 @@ const PORT = process.env.PORT || 10000;
 // Security Middleware
 app.use(helmet());
 app.use(morgan('combined'));
+app.use(express.json());
+app.use(express.urlencoded({ extended: true }));
+app.use(cors(corsOptions)); // Your CORS config
 
 const limiter = rateLimit({
   windowMs: 15 * 60 * 1000, // 15 minutes
@@ -277,9 +280,19 @@ app.get('/api/messages', async (req, res) => {
 
 app.post('/api/send-message', async (req, res) => {
   try {
+    // Add proper body parsing middleware at the top of your server.js
+    // Make sure these are before your routes:
+    app.use(express.json()); // for parsing application/json
+    app.use(express.urlencoded({ extended: true })); // for parsing application/x-www-form-urlencoded
+
     const { text, user, photoURL } = req.body;
+    
     if (!text || !user) {
-      return res.status(400).json({ error: 'Missing required fields' });
+      return res.status(400).json({ 
+        error: 'Missing required fields',
+        required: ['text', 'user'],
+        received: req.body
+      });
     }
 
     const message = {
@@ -291,15 +304,24 @@ app.post('/api/send-message', async (req, res) => {
 
     // Save to database
     const result = await db.collection('messages').insertOne(message);
-    const savedMessage = result.ops[0];
+    const savedMessage = { ...message, _id: result.insertedId };
 
     // Trigger Pusher event
-    pusher.trigger('chat', 'message', savedMessage);
+    // In your server.js, add error handling for Pusher
+   pusher.trigger('chat', 'message', savedMessage, (error) => {
+  if (error) {
+    console.error('Pusher trigger error:', error);
+  }
+});
 
     res.status(201).json(savedMessage);
   } catch (err) {
     console.error('Message send error:', err);
-    res.status(500).json({ error: 'Failed to send message' });
+    res.status(500).json({ 
+      error: 'Failed to send message',
+      details: err.message,
+      stack: process.env.NODE_ENV === 'development' ? err.stack : undefined
+    });
   }
 });
 

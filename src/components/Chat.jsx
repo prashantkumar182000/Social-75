@@ -76,30 +76,52 @@ const Chat = () => {
 
   // Send message with optimistic UI update
   const sendMessage = async (e) => {
-    if (e) e.preventDefault(); // Prevent default form submission
+    if (e) e.preventDefault();
     if (!newMessage.trim() || !auth.currentUser) return;
-
-    const tempId = Date.now().toString(); // Unique ID for optimistic update
+  
+    const tempId = Date.now().toString();
+    const user = auth.currentUser;
     const message = {
       text: newMessage,
-      user: auth.currentUser.displayName || auth.currentUser.email,
-      photoURL: auth.currentUser.photoURL || '',
-      timestamp: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }),
-      tempId, // Temporary ID for tracking
+      user: user.displayName || user.email,
+      photoURL: user.photoURL || '',
+      tempId
     };
-
+  
     try {
       // Optimistic update
-      setMessages(prev => [...prev, message]);
+      setMessages(prev => [...prev, {
+        ...message,
+        timestamp: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })
+      }]);
       setNewMessage('');
-
+  
       // Send to backend
-      await fetch('https://social-75-39je.onrender.com/api/send-message', {
+      const response = await fetch('https://social-75-39je.onrender.com/api/send-message', {
         method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(message),
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          text: newMessage,
+          user: user.displayName || user.email,
+          photoURL: user.photoURL || ''
+        }),
+        credentials: 'include' // Important for cookies/sessions if using them
       });
+  
+      if (!response.ok) {
+        throw new Error(`HTTP error! status: ${response.status}`);
+      }
+  
+      const savedMessage = await response.json();
+      
+      // Replace optimistic message with saved message from server
+      setMessages(prev => prev.map(msg => 
+        msg.tempId === tempId ? savedMessage : msg
+      ));
     } catch (err) {
+      console.error('Message send error:', err);
       setError('Failed to send message');
       // Remove failed message
       setMessages(prev => prev.filter(msg => msg.tempId !== tempId));
