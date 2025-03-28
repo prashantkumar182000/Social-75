@@ -25,10 +25,12 @@ app.use(limiter);
 // CORS Configuration
 const corsOptions = {
   origin: process.env.NODE_ENV === 'production' 
-    ? [process.env.FRONTEND_URL, 'https://social-75.vercel.app/'] 
+    ? [process.env.FRONTEND_URL, 'https://social-75.vercel.app'] 
     : 'http://localhost:5173',
   methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
-  credentials: true
+  allowedHeaders: ['Content-Type', 'Authorization'],
+  credentials: true,
+  exposedHeaders: ['Content-Length', 'X-Ratelimit-Limit'] // Optional but recommended
 };
 app.use(cors(corsOptions));
 app.use(bodyParser.json({ limit: '10mb' }));
