@@ -45,6 +45,10 @@ html {
   color: #888;
 }
 
+.main-content {
+  padding-top: var(--navbar-height);
+}
+
 /* Custom scrollbar */
 ::-webkit-scrollbar {
   width: 8px;
