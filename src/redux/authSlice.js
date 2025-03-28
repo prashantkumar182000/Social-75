@@ -15,16 +15,19 @@ const authSlice = createSlice({
       state.loading = true;
       state.error = null;
     },
-    loginSuccess: (state, action) => {
-      state.user = {
-        uid: action.payload.uid,
-        email: action.payload.email,
-        displayName: action.payload.displayName,
-        photoURL: action.payload.photoURL,
-      };
-      state.loading = false;
-      state.error = null;
-    },
+    // In authSlice.js, modify loginSuccess:
+loginSuccess: (state, action) => {
+  const user = action.payload;
+  state.user = {
+    uid: user.uid,
+    email: user.email,
+    displayName: user.displayName || '',
+    photoURL: user.photoURL || '',
+    emailVerified: user.emailVerified || false
+  };
+  state.loading = false;
+  state.error = null;
+},
     loginFailure: (state, action) => {
       state.error = action.payload;
       state.loading = false;

@@ -1,4 +1,5 @@
 require('dotenv').config();
+
 const express = require('express');
 const cors = require('cors');
 const bodyParser = require('body-parser');
@@ -23,17 +24,18 @@ const limiter = rateLimit({
 app.use(limiter);
 
 // CORS Configuration
+// In server.js, update corsOptions:
 const corsOptions = {
-  origin: process.env.NODE_ENV === 'production' 
-    ? [process.env.FRONTEND_URL, 'https://social-75.vercel.app'] 
-    : 'http://localhost:5173',
+  origin: ['http://localhost:5173', 'https://social-75.vercel.app'],
   methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
   allowedHeaders: ['Content-Type', 'Authorization'],
   credentials: true,
-  exposedHeaders: ['Content-Length', 'X-Ratelimit-Limit'] // Optional but recommended
+  optionsSuccessStatus: 200 // Some legacy browsers choke on 204
 };
+
+// Then use it like this:
 app.use(cors(corsOptions));
-app.use(bodyParser.json({ limit: '10mb' }));
+app.options('*', cors(corsOptions)); // Enable pre-flight for all routes
 
 // Database Connection
 let db;
@@ -204,10 +206,12 @@ app.post('/api/map', async (req, res) => {
 });
 
 // Content Endpoints
+// In server.js, update your content endpoint:
 app.get('/api/content', async (req, res) => {
   try {
     const { search, limit = 20 } = req.query;
     const query = search ? { $text: { $search: search } } : {};
+    
     const talks = await db.collection('tedTalks')
       .find(query)
       .limit(parseInt(limit))
@@ -216,13 +220,16 @@ app.get('/api/content', async (req, res) => {
       
     if (talks.length === 0) {
       const freshTalks = await fetchTEDTalks();
-      return res.json(freshTalks.slice(0, limit));
+      return res.status(200).json(freshTalks.slice(0, limit));
     }
     
-    res.json(talks);
+    res.status(200).json(talks);
   } catch (err) {
     console.error('Content fetch error:', err);
-    res.status(500).json({ error: 'Failed to fetch content' });
+    res.status(500).json({ 
+      error: 'Failed to fetch content',
+      message: err.message 
+    });
   }
 });
 
