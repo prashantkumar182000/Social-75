@@ -25,7 +25,7 @@ app.use(limiter);
 // CORS Configuration
 const corsOptions = {
   origin: process.env.NODE_ENV === 'production' 
-    ? [process.env.FRONTEND_URL, 'https://your-production-domain.com'] 
+    ? [process.env.FRONTEND_URL, 'https://social-75.vercel.app/'] 
     : 'http://localhost:5173',
   methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
   credentials: true
