@@ -56,7 +56,7 @@ const InteractiveMap = () => {
   useEffect(() => {
     const fetchMapData = async () => {
       try {
-        const response = await axios.get('https://social-75-39je.onrender.com/api/map');
+        const response = await axios.get('https://socio-99.onrender.com/api/map');
         setMapData(response.data);
         setLoading(false);
       } catch (error) {
@@ -81,7 +81,7 @@ const InteractiveMap = () => {
         timestamp: new Date().toISOString()
       };
       
-      const response = await axios.post('https://social-75-39je.onrender.com/api/map', newUser);
+      const response = await axios.post('https://socio-99.onrender.com/api/map', newUser);
       setMapData([...mapData, response.data.data]);
       setInterest('');
       setSuccess('Location added successfully!');

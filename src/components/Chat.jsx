@@ -33,7 +33,7 @@ const Chat = () => {
   useEffect(() => {
     const fetchMessages = async () => {
       try {
-        const response = await fetch('https://social-75-39je.onrender.com/api/messages');
+        const response = await fetch('https://socio-99.onrender.com/api/messages');
         const data = await response.json();
         setMessages(data);
         controls.start({ opacity: 1, y: 0 });
@@ -97,7 +97,7 @@ const Chat = () => {
       setNewMessage('');
   
       // Send to backend
-      const response = await fetch('https://social-75-39je.onrender.com/api/send-message', {
+      const response = await fetch('https://socio-99.onrender.com/api/send-message', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',

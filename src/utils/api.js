@@ -1,7 +1,7 @@
 // src/utils/api.js
 import axios from 'axios';
 
-const API_BASE_URL = "https://social-75-39je.onrender.com/api";
+const API_BASE_URL = "https://socio-99.onrender.com/api";
 
 // Configure axios instance with default settings
 const apiClient = axios.create({

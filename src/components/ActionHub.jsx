@@ -32,7 +32,7 @@ const ActionHub = () => {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const response = await fetch('https://social-75-39je.onrender.com/api/action-hub'); // Update port if needed
+        const response = await fetch('https://socio-99.onrender.com/api/action-hub'); // Update port if needed
         if (!response.ok) throw new Error('Failed to fetch data');
         
         const data = await response.json();
